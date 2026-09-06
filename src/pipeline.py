@@ -12,7 +12,7 @@ render -> record (silent) -> mux with the narration track -> final.mp4
 Phase 3 (generate_video_phase3): FULLY AUTOMATIC — feed two product names
 (topic_a, topic_b), and the pipeline itself:
   1. researcher.py  – DDGS web search + LLM brief of key points per product
-  2. script_writer.py – LLM writes a 6-line Vietnamese script (funny/sarcastic)
+  2. script_writer.py – LLM writes a 10-line Vietnamese script (funny/sarcastic)
   3. designer.py    – maps the script to Scene JSON (fixed visual template)
   4. validator.py   – checks animations/characters/images against the library
   then runs the same TTS→render→record→mux tail as phase 2.
@@ -187,6 +187,7 @@ async def generate_video_phase3(
     intro_b: str = None,
     note: str = "",
     research: bool = True,
+    product_name: str = None,
 ) -> Path:
     """Fully automatic: web research → LLM script → designer → validator → video.
 
@@ -223,6 +224,7 @@ async def generate_video_phase3(
         intro_a=intro_a,
         intro_b=intro_b,
         note=note,
+        product_name=product_name,
     )
     print(f"[pipeline] Script generated ({len(script)} lines).")
 

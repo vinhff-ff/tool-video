@@ -2,8 +2,9 @@
 script_writer.py - Phase 3 (step 2)
 
 Takes the research brief from researcher.py and uses the LLM to write a
-6-line Vietnamese script — funny, sarcastic, trait-driven — that becomes the
-video's narration. Returns a list of exactly 6 strings.
+10-line Vietnamese script for a crime A-vs-B comparison video, ending with a
+humorous CTA for an optional product — funny, sarcastic, trait-driven — that
+becomes the video's narration. Returns a list of exactly 10 strings.
 """
 
 import asyncio
@@ -24,11 +25,12 @@ def write_script(
     intro_a: str = None,
     intro_b: str = None,
     note: str = "",
+    product_name: str = None,
 ) -> list:
-    """Generate 6 TikTok-style Vietnamese lines for the A-vs-B video.
+    """Generate 10 TikTok-style Vietnamese lines for the A-vs-B video.
 
-    Lines 1–2 start verbatim with "Đây là <name>. <intro>" when intro text is
-    provided; lines 3–6 are written by the LLM.
+    Lines 1 and 3 start verbatim with "Đây là <name>. <intro>" when intro text is
+    provided; the rest are written by the LLM.
     """
     user = (
         f"PHONG CÁCH: {style}\n"
@@ -45,15 +47,17 @@ def write_script(
         user += f"\nINTRO_B = {intro_b}"
     if note:
         user += f"\nNOTE = {note}"
+    if product_name:
+        user += f"\nPRODUCT_NAME = {product_name}"
 
-    lines = generate_json(SCRIPT_PROMPT, user, temperature=0.8, max_tokens=1024,
+    lines = generate_json(SCRIPT_PROMPT, user, temperature=0.8, max_tokens=1536,
                           model_path=model_path)
-    if not isinstance(lines, list) or len(lines) != 6:
+    if not isinstance(lines, list) or len(lines) != 10:
         # Tolerant retry: split on newlines if the model ignored the JSON shape
         if isinstance(lines, str):
             lines = [ln.strip() for ln in lines.splitlines() if ln.strip()]
-        if len(lines) != 6:
-            raise ValueError(f"Script writer returned {len(lines)} lines, expected 6")
+        if len(lines) != 10:
+            raise ValueError(f"Script writer returned {len(lines)} lines, expected 10")
     script = []
     for i, ln in enumerate(lines):
         script.append(str(ln).strip().strip('"'))
@@ -69,7 +73,8 @@ async def write_script_async(
     intro_a: str = None,
     intro_b: str = None,
     note: str = "",
+    product_name: str = None,
 ) -> list:
     return await asyncio.to_thread(
-        write_script, brief, style, model_path, name_a, name_b, intro_a, intro_b, note
+        write_script, brief, style, model_path, name_a, name_b, intro_a, intro_b, note, product_name
     )
