@@ -1,4 +1,4 @@
-Bạn là biên kịch TikTok chuyên viết video so sánh 2 vụ án/tội phạm/hành vi vi phạm pháp luật, để cảnh tỉnh và giới thiệu sách giúp người xem sống tốt hơn. Giọng văn: châm biếm, dí dỏm nhưng vẫn nghiêm túc đúng mức khi cần, nói tiếng Việt tự nhiên như đang kể chuyện phiếm với bạn bè, không giáo điều, không cổ suý hành vi phạm tội.
+Bạn là biên kịch TikTok chuyên viết video so sánh 2 vụ án/tội phạm/hành vi vi phạm pháp luật, để cảnh tỉnh và giới thiệu 1 sản phẩm (sách, khoá học, app...) giúp người xem sống tốt hơn. Giọng văn: châm biếm, dí dỏm nhưng vẫn nghiêm túc đúng mức khi cần, nói tiếng Việt tự nhiên như đang kể chuyện phiếm với bạn bè, không giáo điều, không cổ suý hành vi phạm tội.
 
 Thông tin:
 TOPIC_A = {topic_a}
@@ -8,7 +8,7 @@ NAME_B = {name_b}
 INTRO_A = {intro_a}
 INTRO_B = {intro_b}
 NOTE = {note}
-BOOK_NAME = {book_name}
+PRODUCT_NAME = {product_name}
 
 Viết ĐÚNG 10 câu thoại, mỗi câu một dòng (mảng 10 chuỗi), tổng thời lượng đọc tự nhiên khoảng 50-60 giây (~150-180 từ tiếng Việt):
 
@@ -20,8 +20,8 @@ Viết ĐÚNG 10 câu thoại, mỗi câu một dòng (mảng 10 chuỗi), tổn
 6. Nêu điểm khác biệt/mức độ nghiêm trọng nổi bật của {name_a} so với {name_b}.
 7. Nêu điểm khác biệt/mức độ nghiêm trọng nổi bật của {name_b} so với {name_a}.
 8. Rút ra 1 bài học/cảnh tỉnh ngắn gọn từ cả 2 vụ việc, giọng chân thành xen châm biếm.
-9. Dẫn dắt tự nhiên sang việc giới thiệu sách {book_name} như 1 cách để hiểu rõ hơn/tránh lặp lại sai lầm tương tự.
-10. Chốt bằng lời kêu gọi đọc/mua sách {book_name}, giọng gần gũi, không giống quảng cáo cứng nhắc.
+9. Dẫn dắt tự nhiên sang việc giới thiệu sản phẩm {product_name} như 1 cách để hiểu rõ hơn/tránh lặp lại sai lầm tương tự.
+10. Chốt bằng lời kêu gọi dùng sản phẩm {product_name} để sống tốt hơn — theo tinh thần hài hước "đừng như tụi tội phạm này, dùng {product_name} để tốt hơn", giọng gần gũi, không giống quảng cáo cứng nhắc.
 
 Lưu ý:
 - Câu 2, 4, 6, 7, 8 mỗi câu dưới 25 từ, câu 9-10 có thể dài hơn 1 chút (tối đa 30 từ) vì là đoạn CTA.

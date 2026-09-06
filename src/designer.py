@@ -1,7 +1,7 @@
 """
 designer.py - Phase 3 (step 3)
 
-Maps the 6 script lines to a Scene JSON using the FIXED visual template.
+Maps the 10 script lines to a Scene JSON using the FIXED visual template.
 Per spec, the designer AI only references existing animation/character names
 and never writes new animation code — so the mapping is deterministic and the
 creativity lives in the script itself (script_writer.py).
@@ -12,13 +12,17 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 DESIGNER_PROMPT = (BASE_DIR / "prompts" / "designer.txt").read_text(encoding="utf-8")
 
-# 6-scene fixed template matching templates/animation.js
+# 10-scene fixed template matching templates/animation.js
 VISUAL_TEMPLATE = [
     {"image": "A",    "character": "pointLeftUp", "animation": "showA"},
+    {"image": "A",    "character": "pointLeft",   "animation": "showA"},
+    {"image": "B",    "character": "pointRight",  "animation": "showB"},
     {"image": "B",    "character": "pointRight",  "animation": "showB"},
     {"image": "both", "character": "confused",    "animation": "compare"},
     {"image": "A",    "character": "pointLeft",   "animation": "showA"},
     {"image": "B",    "character": "pointRight",  "animation": "showB"},
+    {"image": "both", "character": "confused",    "animation": "compare"},
+    {"image": "both", "character": "cart",        "animation": "compare"},
     {"image": "both", "character": "cart",        "animation": "compare"},
 ]
 
