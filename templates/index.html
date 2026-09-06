@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--
+  Reference/dev template only.
+  renderer.py does NOT load this file directly - it inlines this structure
+  plus style.css + animation JS + real asset file:// URIs into a single
+  self-contained HTML file per run (generated/html/<run_id>.html), so
+  Playwright never has to resolve relative script/asset paths.
+  Kept here so the structure is easy to read/edit by hand.
+-->
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comparison Video</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="stage">
+    <img id="background" src="BACKGROUND_SRC" alt="background" />
+    <img id="image-a" class="compare-image compare-image--a" src="IMAGE_A_SRC" alt="A" />
+    <img id="image-b" class="compare-image compare-image--b" src="IMAGE_B_SRC" alt="B" />
+    <img id="character" class="character" src="CHARACTER_SRC" alt="character" />
+    <div id="caption" class="caption"></div>
+  </div>
+
+  <script>
+    const SCENE_DATA = /* SCENE_JSON injected here at render time */ {};
+  </script>
+  <script src="../animations/character.js"></script>
+  <script src="../animations/images.js"></script>
+  <script src="../animations/text.js"></script>
+  <script src="animation.js"></script>
+</body>
+</html>

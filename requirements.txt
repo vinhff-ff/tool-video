@@ -1,0 +1,13 @@
+llama-cpp-python
+# NOTE (Kaggle GPU): llm.py (Phase 3) needs a CUDA build. If the default wheel
+# is CPU-only, force a CUDA build before running Phase 3:
+#   CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python --force-reinstall --no-cache-dir
+huggingface-hub
+playwright
+ffmpeg-python
+ddgs
+edge-tts
+# VieNeu-TTS v3 Turbo – on Kaggle GPU (PyTorch pre-installed)
+# transformers pin matches the official recommendation for stable GPU SDK
+vieneu
+transformers==4.57.6
