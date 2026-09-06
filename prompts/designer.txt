@@ -8,8 +8,8 @@ Kịch bản 6 câu được map theo MẪU CỐ ĐỊNH:
 1. showA      / pointLeftUp  (giới thiệu vật A)
 2. showB      / pointRight   (giới thiệu vật B)
 3. compare    / confused     (hai thứ khác gì nhau)
-4. showA      / pointLeft    (đặc điểm vật A)
-5. showB      / pointRight   (đặc điểm vật B)
+4. showA      / pointLeft    (đặc điểm vật A, khoảng 5 - 10 đặc điểm )
+5. showB      / pointRight   (đặc điểm vật B, khoảng 5 - 10 đặc điểm )
 6. compare    / cart         (chốt giỏ hàng)
 
 Chỉ trả về JSON hợp lệ cho scene i, không giải thích:
