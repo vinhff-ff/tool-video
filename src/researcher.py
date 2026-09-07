@@ -1,9 +1,10 @@
 """
 researcher.py - Phase 3 (step 1)
 
-Gathers real web info about product A and product B via DuckDuckGo (DDGS),
-then asks the LLM to compress the raw snippets into a short brief of key
-points per product. Only that compact brief is passed to the script writer.
+Gathers real web info about criminal case / character A and criminal case /
+character B via DuckDuckGo (DDGS), then asks the LLM to compress the raw
+snippets into a short brief of key points per case. Only that compact brief
+is passed to the script writer.
 
 Run on Kaggle with "Internet: ON".
 """
@@ -37,7 +38,7 @@ def search_topic(query: str, max_results: int = 5, region: str = "vi-vn") -> str
 
 def research_products(topic_a: str, topic_b: str, max_results: int = 5) -> dict:
     """
-    Returns {"topic_a": [...], "topic_b": [...]} — short key points per product,
+    Returns {"topic_a": [...], "topic_b": [...]} — short key points per case,
     computed by the LLM from real search snippets.
     """
     print(f"[researcher] Searching web for: {topic_a} | {topic_b} …")
@@ -48,7 +49,7 @@ def research_products(topic_a: str, topic_b: str, max_results: int = 5) -> dict:
         raise RuntimeError("Web search returned nothing — check Kaggle Internet is ON")
 
     system = RESEARCHER_PROMPT.format(search_a=search_a, search_b=search_b)
-    brief = generate_json(system, "Tóm tắt 2 sản phẩm trên thành các điểm nổi bật.",
+    brief = generate_json(system, "Tóm tắt 2 nhân vật / vụ án trên thành các điểm nổi bật.",
                           temperature=0.3, max_tokens=1024)
     return {"topic_a": brief["topic_a"], "topic_b": brief["topic_b"]}
 

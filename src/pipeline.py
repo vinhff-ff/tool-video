@@ -9,10 +9,10 @@ REAL measured durations overwrite the scene JSON's durations, then
 render -> record (silent) -> mux with the narration track -> final.mp4
 (with audio). Audio is always the source of truth for timing, never a guess.
 
-Phase 3 (generate_video_phase3): FULLY AUTOMATIC — feed two product names
+Phase 3 (generate_video_phase3): FULLY AUTOMATIC — feed two criminals/cases
 (topic_a, topic_b), and the pipeline itself:
-  1. researcher.py  – DDGS web search + LLM brief of key points per product
-  2. script_writer.py – LLM writes a 10-line Vietnamese script (funny/sarcastic)
+  1. researcher.py  – DDGS web search + LLM brief of key points per case
+  2. script_writer.py – LLM writes a 10-line Vietnamese script (serious, investigative)
   3. designer.py    – maps the script to Scene JSON (fixed visual template)
   4. validator.py   – checks animations/characters/images against the library
   then runs the same TTS→render→record→mux tail as phase 2.
@@ -50,7 +50,7 @@ supported directly in Jupyter/Kaggle cells):
 
     # Phase 3 (LLM auto-generates everything)
     result = await generate_video_phase3(
-        topic_a="Chanel nước hoa", topic_b="Dior nước hoa",
+        topic_a="Vụ án A", topic_b="Vụ án B",
         assets=assets, run_id="test_run_003",
     )
 """
@@ -179,7 +179,7 @@ async def generate_video_phase3(
     engine: str = "edge",
     voice: str = None,
     ref_audio: str = None,
-    style: str = "hài hước, châm biếm",
+    style: str = "nghiêm túc, phong cách thám tử/cảnh sát điều tra",
     model_path: str = None,
     name_a: str = None,
     name_b: str = None,
@@ -191,15 +191,18 @@ async def generate_video_phase3(
 ) -> Path:
     """Fully automatic: web research → LLM script → designer → validator → video.
 
-    topic_a/topic_b: two products to compare (any short description, e.g. names).
+    topic_a/topic_b: two criminals / cases to compare (any short description).
     name_a/name_b:   display names used as "Đây là <name>..." in lines 1–2.
-    intro_a/intro_b: verbatim intro text appended to lines 1–2 (no need for
-                     research when provided — the user is authoring the opener).
+    intro_a/intro_b: research hints — optional notes about each character guiding
+                     what the LLM should look up. When empty the LLM researches
+                     via the web brief instead.
     note:            optional free-text instruction the LLM must follow for the
-                     rest of the script (tone, points to hit, jokes, etc).
+                     rest of the script (tone, points to hit, etc).
+    product_name:    optional product name for the serious CTA at the end;
+                     empty/None → no product CTA in the script.
     research:        set False to skip the DDGS web search (used by the Telegram
-                     bot which supplies intro text instead).
-    style:           tone for the LLM script (default: funny/sarcastic).
+                     bot which supplies intro hints instead).
+    style:           tone for the LLM script (default: serious, detective-style).
     model_path:      path to a GGUF model; None → auto-download Qwen2.5-7B-Instruct.
     engine/voice/ref_audio: same TTS options as phase 2.
     """
@@ -208,7 +211,7 @@ async def generate_video_phase3(
     from designer import design_scenes
     from validator import validate_scene_json
 
-    if research and intro_a is None and intro_b is None:
+    if research and not intro_a and not intro_b:
         brief = await research_products_async(topic_a, topic_b)
         print(f"[pipeline] Research done: A={len(brief['topic_a'])} pts, B={len(brief['topic_b'])} pts")
     else:
@@ -295,8 +298,8 @@ if __name__ == "__main__":
     # --- Phase 3: LLM tự sinh toàn bộ -------------------------------------------------
     result = asyncio.run(
         generate_video_phase3(
-            topic_a="Chanel nước hoa",
-            topic_b="Dior nước hoa",
+            topic_a="Vụ án A",
+            topic_b="Vụ án B",
             assets=assets,
             run_id="test_phase3",
         )

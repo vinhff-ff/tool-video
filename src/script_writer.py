@@ -2,9 +2,9 @@
 script_writer.py - Phase 3 (step 2)
 
 Takes the research brief from researcher.py and uses the LLM to write a
-10-line Vietnamese script for a crime A-vs-B comparison video, ending with a
-humorous CTA for an optional product — funny, sarcastic, trait-driven — that
-becomes the video's narration. Returns a list of exactly 10 strings.
+10-line Vietnamese script — serious, investigative, detective-style — for a
+crime A-vs-B comparison video, ending with a sober CTA for an optional product.
+Returns a list of exactly 10 strings.
 """
 
 import asyncio
@@ -18,7 +18,7 @@ SCRIPT_PROMPT = (BASE_DIR / "prompts" / "script_writer.txt").read_text(encoding=
 
 def write_script(
     brief: dict,
-    style: str = "hài hước, châm biếm",
+    style: str = "nghiêm túc, phong cách thám tử/cảnh sát điều tra",
     model_path: str = None,
     name_a: str = None,
     name_b: str = None,
@@ -27,10 +27,11 @@ def write_script(
     note: str = "",
     product_name: str = None,
 ) -> list:
-    """Generate 10 TikTok-style Vietnamese lines for the A-vs-B video.
+    """Generate 10 investigative-style Vietnamese lines for the A-vs-B video.
 
-    Lines 1 and 3 start verbatim with "Đây là <name>. <intro>" when intro text is
-    provided; the rest are written by the LLM.
+    INTRO_A / INTRO_B are research hints (not spoken text): they guide the LLM
+    on what to find out about each character. When absent the LLM researches on
+    its own via the brief.
     """
     user = (
         f"PHONG CÁCH: {style}\n"
@@ -41,9 +42,9 @@ def write_script(
         user += f"\nNAME_A = {name_a}"
     if name_b is not None:
         user += f"\nNAME_B = {name_b}"
-    if intro_a is not None:
+    if intro_a:
         user += f"\nINTRO_A = {intro_a}"
-    if intro_b is not None:
+    if intro_b:
         user += f"\nINTRO_B = {intro_b}"
     if note:
         user += f"\nNOTE = {note}"
@@ -66,7 +67,7 @@ def write_script(
 
 async def write_script_async(
     brief: dict,
-    style: str = "hài hước, châm biếm",
+    style: str = "nghiêm túc, phong cách thám tử/cảnh sát điều tra",
     model_path: str = None,
     name_a: str = None,
     name_b: str = None,

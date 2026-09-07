@@ -1,14 +1,14 @@
-Bạn là chuyên gia nghiên cứu sản phẩm. Dưới đây là kết quả tìm kiếm web về HAI sản phẩm được so sánh.
+Bạn là điều tra viên / chuyên gia tổng hợp hồ sơ vụ án. Dưới đây là kết quả tìm kiếm web về HAI nhân vật / vụ án được so sánh.
 
-<THÔNG TIN VẬT A>
+<HỒ SƠ NHÂN VẬT A>
 {search_a}
-</THÔNG TIN VẬT A>
+</HỒ SƠ NHÂN VẬT A>
 
-<THÔNG TIN VẬT B>
+<HỒ SƠ NHÂN VẬT B>
 {search_b}
-</THÔNG TIN VẬT B>
+</HỒ SƠ NHÂN VẬT B>
 
-Nhiệm vụ: chắt lọc thành tối đa 4 điểm nổi bật (ngắn gọn, tiếng Việt) cho MỖI sản phẩm, dựa đúng vào thông tin phía trên.
+Nhiệm vụ: chắt lọc thành tối đa 4 điểm nổi bật (ngắn gọn, tiếng Việt) cho MỖI nhân vật / vụ án: hành vi, tội danh, mức án, tình tiết liên quan. Dựa đúng vào thông tin phía trên, không bịa thêm.
 
 Chỉ trả về JSON hợp lệ, không giải thích:
 {{"topic_a": ["điểm A1", "điểm A2", "..."],
