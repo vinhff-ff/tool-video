@@ -1,18 +1,17 @@
 // animations/character.js
-// Controls characters: main (center / point left / point right / point left-up /
-// / point right), plus optional extra characters ("confused", "cart") that are
-// swapped in per scene. Only the character named in the scene is visible.
+// Controls characters: main (center / point left / point right / point left-up),
+// plus an optional extra character ("confused") that is swapped in per scene.
+// Only the character named in the scene is visible.
 const Character = {
-  els: { main: null, confused: null, cart: null },
+  els: { main: null, confused: null },
 
-  init(mainEl, confusedEl, cartEl) {
+  init(mainEl, confusedEl) {
     this.els.main = mainEl;
     this.els.confused = confusedEl;
-    this.els.cart = cartEl;
     this.show("main");
   },
 
-  // Show one character (hide the rest). name in ["main", "confused", "cart"].
+  // Show one character (hide the rest). name in ["main", "confused"].
   show(name) {
     name = name || "main";
     for (const key in this.els) {

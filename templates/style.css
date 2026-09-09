@@ -60,15 +60,6 @@ html, body {
 .character.char--left  { transform: translateX(-50%) scaleX(-1); }
 .character.char--right { transform: translateX(-50%) scaleX(1); }
 
-/* Cart character: anchored to the RIGHT edge for this asset's layout. */
-.character--cart {
-  right: 0;
-  left: auto;
-  bottom: 80px;
-  height: 900px;
-  transform: translateX(0) scaleX(1);
-}
-
 .caption {
   position: absolute;
   top: 42%;

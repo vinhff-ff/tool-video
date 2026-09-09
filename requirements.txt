@@ -1,13 +1,11 @@
-llama-cpp-python
-# NOTE (Kaggle GPU): llm.py (Phase 3) needs a CUDA build. If the default wheel
-# is CPU-only, force a CUDA build before running Phase 3:
-#   CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python --force-reinstall --no-cache-dir
-huggingface-hub
+# Pipeline runtime deps (chạy trên Kaggle notebook — python3 chính)
 playwright
 ffmpeg-python
-ddgs
 edge-tts
-# VieNeu-TTS v3 Turbo – on Kaggle GPU (PyTorch pre-installed)
-# transformers pin matches the official recommendation for stable GPU SDK
 vieneu
 transformers==4.57.6
+
+# TTS engine "vieneu" chạy trong venv riêng (xem build_template.py SETUP cell) —
+# cài vào tts_env với numpy<2.3, scipy, transformers, safetensors, gradio,
+# huggingface_hub, kaldi-native-fbank, librosa, onnxruntime, PyYAML, sea-g2p,
+# soundfile, soxr, tokenizers (đã có trong cell). Không cần ở đây.

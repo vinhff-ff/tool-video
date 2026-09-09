@@ -1,46 +1,74 @@
 {
-  "duration": 28,
+  "duration": 40,
   "scenes": [
     {
-      "text": "Đây là hàng hiệu đây, nhưng nhìn thiết kế này thì... bình thường như bao người thôi.",
       "image": "A",
       "character": "pointLeftUp",
       "animation": "showA",
+      "text": "Đây là kẻ lừa đảo A.",
       "duration": 4
     },
     {
-      "text": "Đây là hàng xịn, em này mới đúng chất tiền nào của nấy.",
       "image": "B",
       "character": "pointRight",
       "animation": "showB",
+      "text": "Đây là tay buôn lậu B.",
       "duration": 4
     },
     {
-      "text": "Thế hai đứa khác nhau chỗ nào? Khác nhau hết trơn, chỉ khổ cái giá thì y chang nhau.",
-      "image": "both",
-      "character": "confused",
-      "animation": "compare",
-      "duration": 4
-    },
-    {
-      "text": "Vật A ghi trên hộp là tính năng xịn xò, đỉnh của chóp luôn á. Giá mà được xài thử thì tốt.",
       "image": "A",
       "character": "pointLeft",
       "animation": "showA",
+      "text": "Vậy hai kẻ này có tội khác nhau thế nào.",
       "duration": 4
     },
     {
-      "text": "Còn vật B được cái mác sang trọng treo cho sang. Nhưng sang mà không xài thì cũng hơi phí.",
       "image": "B",
       "character": "pointRight",
       "animation": "showB",
+      "text": "A dùng chiêu bài cũ, tinh vi và lặng lẽ.",
       "duration": 4
     },
     {
-      "text": "Sản phẩm tốt nhất mình cứ quăng vào giỏ hàng cái đã. Mua xong xài thế nào thì... chốt đơn đã.",
+      "image": "A",
+      "character": "pointLeft",
+      "animation": "showA",
+      "text": "B thì phô trương, liều mạng như một màn sân khấu.",
+      "duration": 4
+    },
+    {
+      "image": "B",
+      "character": "pointRight",
+      "animation": "showB",
+      "text": "Án dành cho A là 5 năm sau song sắt.",
+      "duration": 4
+    },
+    {
+      "image": "A",
+      "character": "pointLeft",
+      "animation": "showA",
+      "text": "Án dành cho B là 12 năm sau chấn song.",
+      "duration": 4
+    },
+    {
+      "image": "B",
+      "character": "pointRight",
+      "animation": "showB",
+      "text": "Cả hai đều mượn hào quang để che đi bóng tối.",
+      "duration": 4
+    },
+    {
+      "image": "A",
+      "character": "pointLeft",
+      "animation": "showA",
+      "text": "Lá bài nào rồi cũng phải lật ngửa.",
+      "duration": 4
+    },
+    {
       "image": "both",
-      "character": "cart",
+      "character": "confused",
       "animation": "compare",
+      "text": "Hãy sống đúng pháp luật, đừng học theo họ.",
       "duration": 4
     }
   ]

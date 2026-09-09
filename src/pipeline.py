@@ -9,21 +9,18 @@ REAL measured durations overwrite the scene JSON's durations, then
 render -> record (silent) -> mux with the narration track -> final.mp4
 (with audio). Audio is always the source of truth for timing, never a guess.
 
-Phase 3 (generate_video_phase3): FULLY AUTOMATIC — feed two criminals/cases
-(topic_a, topic_b), and the pipeline itself:
-  1. researcher.py  – DDGS web search + LLM brief of key points per case
-  2. script_writer.py – LLM writes a 10-line Vietnamese script (serious, investigative)
-  3. designer.py    – maps the script to Scene JSON (fixed visual template)
-  4. validator.py   – checks animations/characters/images against the library
+Phase 3 (generate_video_phase3): takes the dialogue lines (10-15) provided by
+an EXTERNAL AI (the Telegram bot receives them as a JSON array), and:
+  1. designer.py  – maps the lines to Scene JSON (fixed visual template, no cart)
+  2. validator.py – checks animations/characters/images against the library
   then runs the same TTS→render→record→mux tail as phase 2.
-The Lean model runs LOCALLY on Kaggle's GPU via llama.cpp (Qwen2.5-7B GGUF,
-auto-downloaded on first use).
+No LLM/GGUF model is needed anywhere in the pipeline.
 
 TTS engine is pluggable:
     engine="edge"   – Microsoft Edge neural TTS (free, no GPU, no API key)
                        default voice: vi-VN-HoaiMyNeural
     engine="vieneu"  – VieNeu-TTS v3 Turbo on Kaggle GPU (48 kHz,
-                       20 preset voices + instant voice cloning)
+                       custom voice via ref_audio cloning)
                        default voice: "Adam" (Southern male)
 
 Run from the project root in a Kaggle notebook cell (top-level await is
@@ -37,7 +34,6 @@ supported directly in Jupyter/Kaggle cells):
         "background": "assets/background.jpg",
         "character": "assets/character.png",
         "character_confused": "assets/character_confused.png",  # optional
-        "character_cart": "assets/character_cart.png",          # optional
         "image_a": "assets/A.jpg",
         "image_b": "assets/B.jpg",
     }
@@ -48,9 +44,9 @@ supported directly in Jupyter/Kaggle cells):
         assets=assets, run_id="test_run_001",
     )
 
-    # Phase 3 (LLM auto-generates everything)
+    # Phase 3 (external AI supplies the dialogue lines)
     result = await generate_video_phase3(
-        topic_a="Vụ án A", topic_b="Vụ án B",
+        script_lines=["Đây là A.", "Đây là B.", "..."],
         assets=assets, run_id="test_run_003",
     )
 """
@@ -172,70 +168,35 @@ async def generate_video_phase2(
 
 
 async def generate_video_phase3(
-    topic_a: str,
-    topic_b: str,
+    script_lines: list,
     assets: dict,
     run_id: str,
-    engine: str = "edge",
+    engine: str = "vieneu",
     voice: str = None,
     ref_audio: str = None,
-    style: str = "nghiêm túc, phong cách thám tử/cảnh sát điều tra",
-    model_path: str = None,
-    name_a: str = None,
-    name_b: str = None,
-    intro_a: str = None,
-    intro_b: str = None,
-    note: str = "",
-    research: bool = True,
-    product_name: str = None,
 ) -> Path:
-    """Fully automatic: web research → LLM script → designer → validator → video.
+    """From external-AI dialogue lines (10-15) → designer → validator → video.
 
-    topic_a/topic_b: two criminals / cases to compare (any short description).
-    name_a/name_b:   display names used as "Đây là <name>..." in lines 1–2.
-    intro_a/intro_b: research hints — optional notes about each character guiding
-                     what the LLM should look up. When empty the LLM researches
-                     via the web brief instead.
-    note:            optional free-text instruction the LLM must follow for the
-                     rest of the script (tone, points to hit, etc).
-    product_name:    optional product name for the serious CTA at the end;
-                     empty/None → no product CTA in the script.
-    research:        set False to skip the DDGS web search (used by the Telegram
-                     bot which supplies intro hints instead).
-    style:           tone for the LLM script (default: serious, detective-style).
-    model_path:      path to a GGUF model; None → auto-download Qwen2.5-7B-Instruct.
-    engine/voice/ref_audio: same TTS options as phase 2.
+    script_lines: list of Vietnamese narration strings (10-15), produced by the
+                  external AI and passed through by the Telegram bot.
+    engine/voice/ref_audio: same TTS options as phase 2 (vieneu + custom
+                  ref_audio clone for the fixed reused voice).
     """
-    from researcher import research_products_async
-    from script_writer import write_script_async
     from designer import design_scenes
     from validator import validate_scene_json
 
-    if research and not intro_a and not intro_b:
-        brief = await research_products_async(topic_a, topic_b)
-        print(f"[pipeline] Research done: A={len(brief['topic_a'])} pts, B={len(brief['topic_b'])} pts")
-    else:
-        brief = {"topic_a": str(topic_a), "topic_b": str(topic_b)}
-        print("[pipeline] Skipped research (user-supplied intro text).")
+    if not (10 <= len(script_lines) <= 15):
+        raise ValueError(
+            f"script_lines must be 10-15 lines, got {len(script_lines)}"
+        )
+    if not all(isinstance(ln, str) and ln.strip() for ln in script_lines):
+        raise ValueError("Every line in script_lines must be a non-empty string")
 
-    script = await write_script_async(
-        brief,
-        style=style,
-        model_path=model_path,
-        name_a=name_a or topic_a,
-        name_b=name_b or topic_b,
-        intro_a=intro_a,
-        intro_b=intro_b,
-        note=note,
-        product_name=product_name,
-    )
-    print(f"[pipeline] Script generated ({len(script)} lines).")
-
-    scene_json = design_scenes(script)
+    scene_json = design_scenes(script_lines)
     validate_scene_json(scene_json)
     print(f"[pipeline] Scene JSON validated ({len(scene_json['scenes'])} scenes).")
 
-    # Save the auto-generated scene JSON for inspection/reuse
+    # Save the scene JSON for inspection/reuse
     scenes_dir = BASE_DIR / "generated" / "scripts"
     scenes_dir.mkdir(parents=True, exist_ok=True)
     out_path = scenes_dir / f"{run_id}.json"
@@ -254,54 +215,37 @@ if __name__ == "__main__":
         "background": str(BASE_DIR / "assets" / "background.jpg"),
         "character": str(BASE_DIR / "assets" / "character.png"),
         "character_confused": str(BASE_DIR / "assets" / "character_confused.png"),
-        "character_cart": str(BASE_DIR / "assets" / "character_cart.png"),
         "image_a": str(BASE_DIR / "assets" / "A.jpg"),
         "image_b": str(BASE_DIR / "assets" / "B.jpg"),
     }
 
-    # --- edge-tts (default) ---------------------------------------------------
     result = asyncio.run(
         generate_video_phase2(
             scene_json_path=str(BASE_DIR / "generated" / "scripts" / "example_scene.json"),
             assets=assets,
-            run_id="test_edge",
+            run_id="test_phase2",
             engine="edge",
         )
     )
-    print("DONE (edge):", result)
+    print("DONE (phase2 edge):", result)
 
-    # --- VieNeu-TTS v3 Turbo – preset voice -----------------------------------
-    result = asyncio.run(
-        generate_video_phase2(
-            scene_json_path=str(BASE_DIR / "generated" / "scripts" / "example_scene.json"),
-            assets=assets,
-            run_id="test_vieneu_preset",
-            engine="vieneu",
-            voice="Phạm Tuyên",
-        )
-    )
-    print("DONE (vieneu preset):", result)
-
-    # --- VieNeu-TTS v3 Turbo – voice cloning ----------------------------------
-    ref_clip = str(BASE_DIR / "assets" / "my_voice_sample.wav")
-    result = asyncio.run(
-        generate_video_phase2(
-            scene_json_path=str(BASE_DIR / "generated" / "scripts" / "example_scene.json"),
-            assets=assets,
-            run_id="test_vieneu_clone",
-            engine="vieneu",
-            ref_audio=ref_clip,
-        )
-    )
-    print("DONE (vieneu clone):", result)
-
-    # --- Phase 3: LLM tự sinh toàn bộ -------------------------------------------------
     result = asyncio.run(
         generate_video_phase3(
-            topic_a="Vụ án A",
-            topic_b="Vụ án B",
+            script_lines=[
+                "Đây là kẻ lừa đảo A.",
+                "Đây là tay buôn lậu B.",
+                "Vậy hai kẻ này có tội khác nhau thế nào.",
+                "A dùng chiêu bài cũ, tinh vi và lặng lẽ.",
+                "B thì phô trương, liều mạng như một màn sân khấu.",
+                "Án dành cho A là 5 năm sau song sắt.",
+                "Án dành cho B là 12 năm sau chấn song.",
+                "Cả hai đều mượn hào quang để che đi bóng tối.",
+                "Lá bài nào rồi cũng phải lật ngửa.",
+                "Hãy sống đúng pháp luật, đừng học theo họ.",
+            ],
             assets=assets,
             run_id="test_phase3",
+            engine="edge",
         )
     )
-    print("DONE (phase3 LLM):", result)
+    print("DONE (phase3):", result)

@@ -7,11 +7,10 @@ the renderer. Raises a clear error on anything the browser layer can't play.
 
 VALID_ANIMATIONS = {
     "intro", "outro", "fadeIn", "fadeOut", "slideLeft", "slideRight",
-    "zoomIn", "zoomOut", "showA", "showB", "compare",
-    "showConfused", "showCart",
+    "zoomIn", "zoomOut", "showA", "showB", "compare", "showConfused",
 }
 VALID_IMAGES = {"A", "B", "both"}
-VALID_CHARACTERS = {"pointLeftUp", "pointLeft", "pointRight", "center", "confused", "cart"}
+VALID_CHARACTERS = {"pointLeftUp", "pointLeft", "pointRight", "center", "confused"}
 
 
 def validate_scene_json(scene_json: dict) -> dict:

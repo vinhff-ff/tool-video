@@ -14,13 +14,12 @@ const AnimationLibrary = {
   showB(ctx)   { ImagesCtl.showB(); },
   compare(ctx) { ImagesCtl.showBoth(); },
   showConfused(ctx) { Character.show("confused"); },
-  showCart(ctx)     { Character.show("cart"); },
 };
 
 function getActiveCharacter(name) {
   // "pointLeftUp", "pointLeft", "pointRight", "center" → main character with a pose
-  // "confused" / "cart" → dedicated extra characters
-  if (name === "confused" || name === "cart") return name;
+  // "confused" → dedicated extra character
+  if (name === "confused") return name;
   return "main";
 }
 
@@ -28,12 +27,11 @@ async function playScene(sceneData) {
   const stage = document.getElementById("stage");
   const charEl = document.getElementById("character");
   const confusedEl = document.getElementById("character-confused");
-  const cartEl = document.getElementById("character-cart");
   const imgA = document.getElementById("image-a");
   const imgB = document.getElementById("image-b");
   const textEl = document.getElementById("caption");
 
-  Character.init(charEl, confusedEl, cartEl);
+  Character.init(charEl, confusedEl);
   ImagesCtl.init(imgA, imgB);
   TextCtl.init(textEl);
 

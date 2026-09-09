@@ -19,7 +19,7 @@ ANIMATIONS_DIR = BASE_DIR / "animations"
 GENERATED_HTML_DIR = BASE_DIR / "generated" / "html"
 
 REQUIRED_ASSET_KEYS = ("background", "character", "image_a", "image_b")
-OPTIONAL_ASSET_KEYS = ("character_confused", "character_cart")
+OPTIONAL_ASSET_KEYS = ("character_confused",)
 
 
 def _read(path: Path) -> str:
@@ -61,7 +61,6 @@ def render_html(scene_json: dict, assets: dict, run_id: str) -> Path:
         "background":          "/abs/or/relative/path/background.png",
         "character":           "/abs/or/relative/path/character.png",   # main character (required)
         "character_confused":  "/abs/or/relative/path/confused.png",    # optional
-        "character_cart":      "/abs/or/relative/path/cart.png",        # optional
         "image_a":             "/abs/or/relative/path/A.jpg",
         "image_b":             "/abs/or/relative/path/B.jpg",
     }
@@ -87,12 +86,6 @@ def render_html(scene_json: dict, assets: dict, run_id: str) -> Path:
         if assets.get("character_confused")
         else ""
     )
-    cart_img = (
-        f'<img id="character-cart" class="character character--cart" '
-        f'src="{_file_uri(assets["character_cart"])}" alt="cart">'
-        if assets.get("character_cart")
-        else ""
-    )
 
     html = f"""<!DOCTYPE html>
 <html lang="vi">
@@ -110,7 +103,6 @@ def render_html(scene_json: dict, assets: dict, run_id: str) -> Path:
     <img id="image-b" class="compare-image compare-image--b" src="{_file_uri(assets['image_b'])}" alt="B">
     <img id="character" class="character" src="{_file_uri(assets['character'])}" alt="character">
     {confused_img}
-    {cart_img}
     <div id="caption" class="caption"></div>
   </div>
 
